@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+#################################################################################
+#
+# Set Git Remote URL to Personal Github
+# -------------------------------------
+#
+# Example:
+# git remote set-url origin git@github.com-personal:johannesgiorgis/dotfiles.git
+#
+#################################################################################
+
+# GLOBAL VARIABLES
+PERSONAL_GITHUB_URL="github.com-personal"
+
+# HELPER FUNCTIONS
+function print_stamp() { echo -e "\n$(date +'%F %T') $*"; }
+
+print_stamp "$0 Started"
+
+fetch_url=$(git remote -v | head -1 | awk -F' ' '{print $2}')
+push_url=$(git remote -v | tail -1 | awk -F' ' '{print $2}')
+
+# Verify no difference between fetch and push URLs
+echo ""
+echo "fetch_url=^$fetch_url^"
+echo "push_url=^$push_url^"
+if [[ "$fetch_url" != "$push_url" ]]
+then
+	echo "ERROR: Fetch URL doesn't match Push URL!"
+	echo -e "\tFetch URL:'${fetch_url}'"
+	echo -e "\tPush URL:'${push_url}'"
+	echo "Exiting script..."
+	exit 1
+else
+	echo "Fetch URL matches Push URL"
+fi
+
+# convert https to ssh
+# initially cloned via https
+if [[ "$fetch_url" == *"https"* ]]
+then
+    echo -e "\nWARN: Convert https to ssh"
+    # new_ssh_url=$(echo "$fetch_url" | sed "s;https://github.com/johannes;git@github.com:johannes;")
+    # TODO: Test and verify this!
+    # Convert https://github.com/johannesgiorgis/.dotfiles.git to
+    # git@github.com:johannesgiorgis/.dotfiles.git
+    new_ssh_url=${fetch_url/https:\/\/github.com\/johannes/git@github.com:johannes}
+    # git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+    echo "git remote set-url origin $new_ssh_url"
+    exit 0
+fi
+
+# Verify git repo hasn't already been set to personal git URL
+current_git_url=$(echo "$fetch_url" | cut -d':' -f1 | cut -d'@' -f2)
+
+echo "current_git_url=^$current_git_url^"
+
+
+if [[ "$current_git_url" == "$PERSONAL_GITHUB_URL" ]]
+then
+	echo "ERROR: Git repo has already been set to Personal Github URL"
+	echo "Exiting script..."
+	exit 1
+else
+	echo "Git will be set to the Personal Github URL"
+fi
+
+# new_git_url=$(echo "$fetch_url" | sed "s/github.com/$PERSONAL_GITHUB_URL/g")
+# TODO: Test and verify this!
+new_git_url=${fetch_url//github.com/$PERSONAL_GITHUB_URL/}
+echo -e "\nNew Git URL:$new_git_url"
+
+echo -e '\nSET:\n'
+echo "git remote set-url origin $new_git_url"
+echo "git config user.name 'Johannes Giorgis'"
+echo "git config user.email 'johannesgiorgis@users.noreply.github.com'"
+
+echo -e '\n\nVERIFY:\n'
+echo "git config --local --list | grep user"
+echo "git remote -v"
+
+print_stamp "$0 Completed"
