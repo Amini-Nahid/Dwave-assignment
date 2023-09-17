@@ -259,21 +259,18 @@ else
 fi
 
 #--------------------
-alias av="aws-vault"
-alias lt='ls -l'
 alias c='code'
 alias wh='which'
 alias cg='cd `git rev-parse --show-toplevel`'
 alias ag='alias | grep'
 alias python=/usr/bin/python3
-alias gci='git checkout integration'
-alias gcm='git checkout main'
-#-----------------------FUNCTIONS
 
-function stf() { sbr tf:"$@";}
-function stfi() { sbr tf:init "$@";}
-function stfp() { sbr tf:plan "$@";}
-function stfd() { sbr tf:deploy "$@";}
+#--------------------git
+alias cg='cd `git rev-parse --show-toplevel`'
+alias gcm='git checkout main'
+alias gh='history|grep'
+alias gil="git log --pretty=format:'%H' -n 1 | pbcopy"
+
 
 
 export NVM_DIR="$HOME/.nvm"
