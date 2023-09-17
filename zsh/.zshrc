@@ -233,6 +233,32 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 #-----------------------ALIASES
+if command -v exa 1>/dev/null 2>&1; then
+    # source: https://github.com/DarrinTisdale/zsh-aliases-exa
+    # general use
+    alias ls='exa'                                                         # ls
+    alias l='exa -lbF --git'                                               # list, size, type, git
+    alias lt='ls -laaF -snew'                                              # list new files last
+    alias ll='exa -lbGF --git'                                             # long list
+    alias llm='exa -lbGF --git --sort=modified'                            # long list, modified date sort
+    alias la='exa -lbhHigUmuSa --time-style=long-iso --git --color-scale'  # all list
+    alias lx='exa -lbhHigUmuSa@ --time-style=long-iso --git --color-scale' # all + extended list
+
+    # speciality views
+    alias lS='exa -1'			                                           # one column, just names
+    alias lta='exa --tree --level=2'                                       # tree
+
+else
+    # Default for ls
+    # alias ls='lsG' # directory color (dark blue) too dark on iterm2 # TODO: Tweak ls colors
+    alias lt='ls -lahtFr'
+    alias lsa='ls -lah'
+    alias l='ls -lah'
+    alias ll='ls -lh'
+    alias la='ls -lAh'
+fi
+
+#--------------------
 alias av="aws-vault"
 alias lt='ls -l'
 alias c='code'

@@ -45,7 +45,7 @@ then
     # TODO: Test and verify this!
     # Convert https://github.com/johannesgiorgis/.dotfiles.git to
     # git@github.com:johannesgiorgis/.dotfiles.git
-    new_ssh_url=${fetch_url/https:\/\/github.com\/johannes/git@github.com:johannes}
+    new_ssh_url=${fetch_url/https:\/\/github.com\/nahid/git@github.com:amini}
     # git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
     echo "git remote set-url origin $new_ssh_url"
     exit 0
@@ -73,8 +73,8 @@ echo -e "\nNew Git URL:$new_git_url"
 
 echo -e '\nSET:\n'
 echo "git remote set-url origin $new_git_url"
-echo "git config user.name 'Johannes Giorgis'"
-echo "git config user.email 'johannesgiorgis@users.noreply.github.com'"
+echo "git config user.name 'Nahid Amini'"
+echo "git config user.email 'na.amini55@gmail.com'"
 
 echo -e '\n\nVERIFY:\n'
 echo "git config --local --list | grep user"
