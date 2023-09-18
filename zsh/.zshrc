@@ -258,6 +258,8 @@ else
     alias la='ls -lAh'
 fi
 
+# count files
+alias count='find . -type f | wc -l'
 #--------------------
 alias c='code'
 alias wh='which'
@@ -268,7 +270,7 @@ alias python=/usr/bin/python3
 #--------------------git
 alias cg='cd `git rev-parse --show-toplevel`'
 alias gcm='git checkout main'
-alias gh='history|grep'
+alias hs='history|grep'
 alias gil="git log --pretty=format:'%H' -n 1 | pbcopy"
 
 
