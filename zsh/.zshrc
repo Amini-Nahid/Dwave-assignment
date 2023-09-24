@@ -260,11 +260,17 @@ fi
 
 # count files
 alias count='find . -type f | wc -l'
+
 #--------------------
+alias ag='alias | grep'
+alias av="aws-vault"
+alias lt='ls -l'
 alias c='code'
 alias wh='which'
 alias cg='cd `git rev-parse --show-toplevel`'
-alias ag='alias | grep'
+alias mkdir='mkdir -pv'
+alias b='brew'
+alias bi='brew install'
 alias python=/usr/bin/python3
 
 #--------------------git
@@ -272,7 +278,48 @@ alias cg='cd `git rev-parse --show-toplevel`'
 alias gcm='git checkout main'
 alias hs='history|grep'
 alias gil="git log --pretty=format:'%H' -n 1 | pbcopy"
+alias play='aws-vault exec acl-playground --'
+#-----------------------FUNCTIONS
 
+function stf() { # sbr tf:<arg>
+  sbr tf:"$@";}
+
+function stfi() { # alais for sbr tf:init 
+  sbr tf:init "$@";}
+
+function stfp() { # alias for tf:plan
+  sbr tf:plan "$@";}
+
+function stfd() { # alias for tf:deploy
+   sbr tf:deploy "$@";}
+#
+function avp() { # alias for aws-vault exec acl-playground -- aws 
+  aws-vault exec acl-playground -- aws "$@"}
+#--------------------------------
+function af() { # list all functions in .zshrc
+  #  search for lines in the ~/.zshrc file that start with "function" and contain "#"
+  rg 'function.*?#' ~/.zshrc | \
+  # remove leading whitespace and the word "function" from the beginning of each line
+  sed 's/^[ \t]*//g;s/^function //' | \
+  # filter out lines that start with "#" or contain the string "rg "
+  rg -v '^#|rg ' | \
+   # split each line into two fields based on the text "{.# ". Prints the first field in cyan color and the second field.
+  awk 'BEGIN {FS = "{.*# "}; { printf "\033[36m%-20s\033[0m %s\n", $1, $2}'
+  }
+#--------------------------------
+function note() { echo `date +"%Y-%m-%d %H:%M:%S  "`"$*" >> ~/notes; } # Add a note to my file
+
+function notes() { vim + ~/notes; } # View/edit notes
+
+# add - to 2 and changed head to tail to make it zsh compatible
+function gotit() { history -2 | tail -n 1 | cut -c 8- >> ~/notes; }
+
+# Youtube Download to MP3 :)
+if command -v youtube-dl 1>/dev/null 2>&1; then
+	function yda() {
+		youtube-dl -cix --audio-format mp3 "$@"
+	}
+fi
 
 
 export NVM_DIR="$HOME/.nvm"
