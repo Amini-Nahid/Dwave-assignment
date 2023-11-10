@@ -232,6 +232,33 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+#-----------------------AWS Completion
+if command -v aws 1>/dev/null 2>&1; then
+
+    function awsm() { aws --profile main "$@"; }
+
+    if test -f "/usr/local/bin/aws_completer"; then
+        complete -C '/usr/local/bin/aws_completer' aws awsm
+    elif test -f "${HOME}/.asdf/shims/aws_completer"; then
+        complete -C "${HOME}/.asdf/shims/aws_completer" aws
+    fi
+fi
+
+if command -v aws-vault 1>/dev/null 2>&1; then
+
+    function avp() { aws-vault exec acl-playground -- aws "$@"; }
+
+    alias play='aws-vault exec acl-playground --'
+    alias stg='aws-vault exec acl-staging --'
+
+    if test -f "/usr/local/bin/aws_completer"; then
+        complete -C '/usr/local/bin/aws_completer' aws-vault avp
+    elif test -f "${HOME}/.asdf/shims/aws_completer"; then
+        complete -C "${HOME}/.asdf/shims/aws_completer" aws-vault avp
+    fi
+
+fi
+
 #-----------------------ALIASES
 if command -v exa 1>/dev/null 2>&1; then
     # source: https://github.com/DarrinTisdale/zsh-aliases-exa
@@ -278,7 +305,7 @@ alias cg='cd `git rev-parse --show-toplevel`'
 alias gcm='git checkout main'
 alias hs='history|grep'
 alias gil="git log --pretty=format:'%H' -n 1 | pbcopy"
-alias play='aws-vault exec acl-playground --'
+alias gamf='git status -s | grep "^ M" | cut -c 4- | xargs git add'
 #-----------------------FUNCTIONS
 
 function stf() { # sbr tf:<arg>
@@ -292,9 +319,7 @@ function stfp() { # alias for tf:plan
 
 function stfd() { # alias for tf:deploy
    sbr tf:deploy "$@";}
-#
-function avp() { # alias for aws-vault exec acl-playground -- aws 
-  aws-vault exec acl-playground -- aws "$@"}
+
 #--------------------------------
 function af() { # list all functions in .zshrc
   #  search for lines in the ~/.zshrc file that start with "function" and contain "#"
